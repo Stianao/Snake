@@ -26,8 +26,16 @@ namespace Snake
         }
         private void GameLoop(object sender, EventArgs e) // Runs every "tick"
         {
+            // x and y: snake position
+            // dx and dy: snake speed and direction
             x += dx;
             y += dy;
+            
+            if (x == foodX && y == foodY) // Checking for snakehead and food on exact same location
+            {
+                SpawnFood(); // if true, move food to new random location
+            }
+            
             Invalidate(); // Draw new window -> will trigger OnPaint-method
         }
         protected override void OnPaint(PaintEventArgs e)
