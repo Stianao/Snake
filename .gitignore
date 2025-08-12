@@ -1,0 +1,13 @@
+# Visual Studio cache
+.vs/
+bin/
+obj/
+
+# Brukerspesifikke filer
+*.user
+*.suo
+
+# Byggresultater
+*.exe
+*.dll
+*.pdb
