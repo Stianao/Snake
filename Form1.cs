@@ -12,6 +12,8 @@ namespace Snake
         int dx = 5; // speed (right)
         int dy = 0;
 
+        List<Point> snake = new List<Point>(); // list with Point-objects (each Point have X and Y values - coordinates to a segment)
+
         Random rand = new Random();
         int foodX, foodY;
 
@@ -22,6 +24,7 @@ namespace Snake
             GameTimer.Tick += GameLoop; // Connects the timer Tick-event to method GameLoop
             GameTimer.Start(); // Starting timer
             this.KeyDown += KeyIsDown;
+            snake.Add(new Point(50, 50)); // Start position for the head
             SpawnFood();
         }
         private void GameLoop(object sender, EventArgs e) // Runs every "tick"
@@ -30,13 +33,24 @@ namespace Snake
             // dx and dy: snake speed and direction
             x += dx;
             y += dy;
-            
-            if (x < foodX + 20 &&
+
+            // Calculating new head for head
+            int newX = snake[0].X + dx;
+            int newY = snake[0].Y + dy;
+
+            // Moving snake body backwards
+            for (int i = snake.Count - 1; i > 0; i--)
+            {
+                snake[i] = snake[i - 1];
+            }
+
+            // Collision with food
+            if (x < foodX + 20 && 
                 x + 20 > foodX &&
                 y < foodY + 20 &&
-                y + 20 > foodY) // Checking for snakehead and food on exact same location
+                y + 20 > foodY) 
             {
-                SpawnFood(); // if true, move food to new random location
+                SpawnFood(); // if true; move food to new random location
             }
             
             Invalidate(); // Draw new window -> will trigger OnPaint-method
@@ -45,8 +59,13 @@ namespace Snake
         {
             base.OnPaint(e);
 
-            e.Graphics.FillRectangle(Brushes.Green, x, y, 20, 20);
-            e.Graphics.FillRectangle(Brushes.Red, foodX, foodY, 20, 20);
+            foreach (var segment in snake)
+            {
+                e.Graphics.FillRectangle(Brushes.Green, segment.X, segment.Y, 20, 20);
+            }
+
+            //e.Graphics.FillRectangle(Brushes.Green, x, y, 20, 20);
+            //e.Graphics.FillRectangle(Brushes.Red, foodX, foodY, 20, 20);
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
