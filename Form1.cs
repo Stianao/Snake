@@ -31,7 +31,10 @@ namespace Snake
             x += dx;
             y += dy;
             
-            if (x == foodX && y == foodY) // Checking for snakehead and food on exact same location
+            if (x < foodX + 20 &&
+                x + 20 > foodX &&
+                y < foodY + 20 &&
+                y + 20 > foodY) // Checking for snakehead and food on exact same location
             {
                 SpawnFood(); // if true, move food to new random location
             }
