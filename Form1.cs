@@ -24,6 +24,7 @@ namespace Snake
             GameTimer.Tick += GameLoop; // Connects the timer Tick-event to method GameLoop
             GameTimer.Start(); // Starting timer
             this.KeyDown += KeyIsDown;
+            this.DoubleBuffered = true;
             snake.Add(new Point(50, 50)); // Start position for the head
             SpawnFood();
         }
@@ -31,8 +32,8 @@ namespace Snake
         {
             // x and y: snake position
             // dx and dy: snake speed and direction
-            x += dx;
-            y += dy;
+            // x += dx;
+            // y += dy;
 
             // Calculating new head for head
             int newX = snake[0].X + dx;
@@ -44,13 +45,17 @@ namespace Snake
                 snake[i] = snake[i - 1];
             }
 
+            snake[0] = new Point(newX, newY);
+
             // Collision with food
-            if (x < foodX + 20 && 
-                x + 20 > foodX &&
-                y < foodY + 20 &&
-                y + 20 > foodY) 
+            if (newX < foodX + 20 && 
+                newX + 20 > foodX &&
+                newY < foodY + 20 &&
+                newY + 20 > foodY) 
             {
                 SpawnFood(); // if true; move food to new random location
+
+                snake.Add(snake[snake.Count - 1]); // Adding a new tailjoint
             }
             
             Invalidate(); // Draw new window -> will trigger OnPaint-method
@@ -63,9 +68,10 @@ namespace Snake
             {
                 e.Graphics.FillRectangle(Brushes.Green, segment.X, segment.Y, 20, 20);
             }
+            
+            e.Graphics.FillRectangle(Brushes.Red, foodX, foodY, 20, 20);
 
             //e.Graphics.FillRectangle(Brushes.Green, x, y, 20, 20);
-            //e.Graphics.FillRectangle(Brushes.Red, foodX, foodY, 20, 20);
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
@@ -94,8 +100,11 @@ namespace Snake
         }
             private void SpawnFood()
             {
-                foodX = rand.Next(0, this.ClientSize.Width / 20) * 20;
-                foodY = rand.Next(0, this.ClientSize.Width / 20) * 20;
+                int maxX = (this.ClientSize.Width / 20) - 1;
+                int maxY = (this.ClientSize.Width / 20) - 1;
+
+                foodX = rand.Next(0, this.ClientSize.Width / maxX) * 20;
+                foodY = rand.Next(0, this.ClientSize.Width / maxY) * 20;
             }
         
     }
