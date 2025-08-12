@@ -30,14 +30,25 @@ namespace Snake
         }
         private void GameLoop(object sender, EventArgs e) // Runs every "tick"
         {
-            // x and y: snake position
-            // dx and dy: snake speed and direction
-            // x += dx;
-            // y += dy;
-
             // Calculating new head for head
             int newX = snake[0].X + dx;
             int newY = snake[0].Y + dy;
+
+            if (newX < 0)
+            {
+                newX = this.ClientSize.Width - 20;
+            } else if (newX >= this.ClientSize.Width)
+            {
+                newX = 0;
+            }
+
+            if (newY < 0)
+            {
+                newY = this.ClientSize.Width - 20;
+            } else if (newY >= this.ClientSize.Width)
+            {
+                newY = 0;
+            }
 
             // Moving snake body backwards
             for (int i = snake.Count - 1; i > 0; i--)
