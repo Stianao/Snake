@@ -56,6 +56,11 @@ namespace Snake
                 SpawnFood(); // if true; move food to new random location
 
                 snake.Add(snake[snake.Count - 1]); // Adding a new tailjoint
+
+                if (GameTimer.Interval > 20)
+                {
+                    GameTimer.Interval -= 5;
+                }
             }
             
             Invalidate(); // Draw new window -> will trigger OnPaint-method
