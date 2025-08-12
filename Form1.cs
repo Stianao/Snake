@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Windows.Forms;
 
 namespace Snake
@@ -10,6 +11,10 @@ namespace Snake
         int y = 50; // position y
         int dx = 5; // speed (right)
         int dy = 0;
+
+        Random rand = new Random();
+        int foodX, foodY;
+
         private readonly System.Windows.Forms.Timer GameTimer = new System.Windows.Forms.Timer { Interval = 100 }; // Timer = WinForms-timer
         public Form1()
         {
@@ -17,6 +22,7 @@ namespace Snake
             GameTimer.Tick += GameLoop; // Connects the timer Tick-event to method GameLoop
             GameTimer.Start(); // Starting timer
             this.KeyDown += KeyIsDown;
+            SpawnFood();
         }
         private void GameLoop(object sender, EventArgs e) // Runs every "tick"
         {
@@ -29,6 +35,7 @@ namespace Snake
             base.OnPaint(e);
 
             e.Graphics.FillRectangle(Brushes.Green, x, y, 20, 20);
+            e.Graphics.FillRectangle(Brushes.Red, foodX, foodY, 20, 20);
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
@@ -55,5 +62,11 @@ namespace Snake
                     break;
             }
         }
+            private void SpawnFood()
+            {
+                foodX = rand.Next(0, this.ClientSize.Width / 20) * 20;
+                foodY = rand.Next(0, this.ClientSize.Width / 20) * 20;
+            }
+        
     }
 }
