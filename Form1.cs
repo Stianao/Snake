@@ -11,9 +11,10 @@ namespace Snake
         int y = 50; // position y
         int delta_x = 5; // starting speed (right) delta x
         int delta_y = 0; // delta y
-        const int cell = 20; // One cell = 20 pixels
+        const int cell = 20; // One cell = 20 pixels (size)
         bool gameOver = false;
         int score = 0; // Counting variable for game points
+        const int scoreBoardSection = 40;
 
         List<Point> snake = new List<Point>(); // list with Point-objects (each Point have X and Y values - coordinates to a segment)
 
@@ -48,12 +49,15 @@ namespace Snake
                 newX = 0;
             }
 
-            if (newY < 0)
+            int topY = scoreBoardSection;
+            int bottomY = this.ClientSize.Height - cell;
+
+            if (newY < topY)
             {
-                newY = this.ClientSize.Height - cell;
-            } else if (newY >= this.ClientSize.Height)
+                newY = bottomY;
+            } else if (newY >= bottomY)
             {
-                newY = 0;
+                newY = topY;
             }
 
             // Moving snake body backwards
@@ -108,11 +112,11 @@ namespace Snake
 
             foreach (var segment in snake)
             {
-                e.Graphics.FillRectangle(Brushes.Green, segment.X, segment.Y, cell, cell);
+                e.Graphics.FillRectangle(Brushes.Green, segment.X, segment.Y, cell, cell); // Drawng a green snake
             }
 
-            e.Graphics.FillRectangle(Brushes.Red, foodX, foodY, cell, cell);
-            e.Graphics.DrawString($"Score: {score}", SystemFonts.DefaultFont, Brushes.Black, 10, 10);
+            e.Graphics.FillRectangle(Brushes.Red, foodX, foodY, cell, cell); // Drawing red food
+            e.Graphics.DrawString($"Score: {score}", SystemFonts.DefaultFont, Brushes.Black, 10, 10); // Showing score at game screen
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
@@ -125,20 +129,20 @@ namespace Snake
 
             switch (e.KeyCode)
             {
-                case Keys.Right:
-                    delta_x = 5; delta_y = 0;
+                case Keys.Right: // Right key
+                    delta_x = 5; delta_y = 0; // Moving 5 pixels to the right x direction, 0 y direction (each tick)
                     break;
 
-                case Keys.Left:
-                    delta_x = -5; delta_y = 0;
+                case Keys.Left: // Left key
+                    delta_x = -5; delta_y = 0; // Moving 5 pixels to the left x direction, 0 y direction (each tick)
                     break;
 
-                case Keys.Up:
-                    delta_x = 0; delta_y = -5;
+                case Keys.Up: // Up key
+                    delta_x = 0; delta_y = -5; // Moving 5 pixels up y direction, 0 x direction (each tick)
                     break;
 
-                case Keys.Down:
-                    delta_x = 0; delta_y = 5;
+                case Keys.Down: // Down key
+                    delta_x = 0; delta_y = 5; // Moving 5 pixels down y direction, 0 x direction (each tick)
                     break;
             }
         }
@@ -151,7 +155,7 @@ namespace Snake
             delta_x = 5; // Resetting the snake speed back to 5 pixels -> right movement along x-axis
             delta_y = 0; // Want y to be zero
 
-            score = 0; 
+            score = 0; // resetting score back to zero at game reset (from game over)
             
             SpawnFood(); // Calling method to reset food spawning and positioning
             
@@ -165,18 +169,20 @@ namespace Snake
                 int maxX = (this.ClientSize.Width / cell) - 1; // x-direction
                 int maxY = (this.ClientSize.Height / cell) - 1; // y-direction
 
-                foodX = rand.Next(0, this.ClientSize.Width / maxX) * cell;
-                foodY = rand.Next(0, this.ClientSize.Height / maxY) * cell;
+                int minRow = scoreBoardSection / cell; 
 
                 Point newFood;
+
                 bool onSnake;
 
             do
             {
                 onSnake = false;
-                int fx = rand.Next(0, maxX) * cell;
-                int fy = rand.Next(0, maxY) * cell;
-                newFood = new Point(fx, fy);
+
+                int fx = rand.Next(0, maxX);
+                int fy = rand.Next(minRow, maxY);
+
+                newFood = new Point(fx * cell, fy * cell);
 
                 foreach (var segment in snake) // segment = element in snake-list -> segment = body joint(cell) of the snake
                 {
