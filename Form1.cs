@@ -13,6 +13,7 @@ namespace Snake
         int delta_y = 0; // delta y
         const int cell = 20; // One cell = 20 pixels (size)
         bool gameOver = false;
+        bool gameStarted = false;
         int score = 0; // Counting variable for game points
         const int scoreBoardSection = 40;
 
@@ -29,7 +30,7 @@ namespace Snake
             this.FormBorderStyle = FormBorderStyle.FixedSingle; 
             this.MaximizeBox = false;
             GameTimer.Tick += GameLoop; // Connects the timer Tick-event to method GameLoop
-            GameTimer.Start(); // Starting timer
+            //GameTimer.Start(); // Starting timer
             this.KeyDown += KeyIsDown;
             this.DoubleBuffered = true;
             snake.Add(new Point(50, 50)); // Start position for the head
@@ -49,7 +50,7 @@ namespace Snake
                 newX = 0;
             }
 
-            int topY = scoreBoardSection;
+            int topY = scoreBoardSection; // 
             int bottomY = this.ClientSize.Height - cell;
 
             if (newY < topY)
@@ -108,6 +109,30 @@ namespace Snake
         }
         protected override void OnPaint(PaintEventArgs e)
         {
+
+            if (!gameStarted)
+            {
+                string message = "Press ENTER to start";
+                Font fontMessage = new Font("Arial", 24);
+                SizeF fontSize = e.Graphics.MeasureString(message, fontMessage);
+                float positionWidthX = (ClientSize.Width - fontSize.Width) / 2;
+                float positionHeightY = (ClientSize.Height - fontSize.Height) / 2;
+
+                e.Graphics.DrawRectangle(Pens.Black, 
+                    positionWidthX - 10, 
+                    positionHeightY - 10, 
+                    fontSize.Width + 20, 
+                    fontSize.Height + 20
+                );
+
+                e.Graphics.DrawString(message, 
+                    fontMessage, 
+                    Brushes.Black, 
+                    positionWidthX, 
+                    positionHeightY);
+
+                return;
+            }
             base.OnPaint(e);
 
             foreach (var segment in snake)
@@ -121,6 +146,12 @@ namespace Snake
 
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
+            if (!gameStarted && e.KeyCode == Keys.Enter)
+            {
+                gameStarted = true;
+                GameTimer.Start();
+            }
+
             if (gameOver && e.KeyCode == Keys.R)
             {
                 ResetGame();
