@@ -52,11 +52,10 @@ namespace Snake
             {
                 newX = 0;
             }
-
             if (newY < topY)
             {
                 newY = bottomY;
-            } else if (newY >= bottomY)
+            } else if (newY > bottomY)
             {
                 newY = topY;
             }
@@ -81,8 +80,9 @@ namespace Snake
                 {
                     GameTimer.Stop(); // Stop the game - the timer stops
                     gameOver = true;
-                    MessageBox.Show("Game Over!"); // Feedback in a popup window - game over
-                    MessageBox.Show("Restart Game. Press R"); // Popup window for reset game, press R key on keyboard
+                    Invalidate();
+                    //MessageBox.Show("Game Over!"); // Feedback in a popup window - game over
+                    //MessageBox.Show("Restart Game. Press R"); // Popup window for reset game, press R key on keyboard
                     return; // returns to cancel method from running food, drawing etc.
                 }
             }
@@ -109,30 +109,17 @@ namespace Snake
         }
         protected override void OnPaint(PaintEventArgs e)
         {
-
             if (!gameStarted)
             {
-                string message = "Press ENTER to start";
-                Font fontMessage = new Font("Arial", 24);
-                SizeF fontSize = e.Graphics.MeasureString(message, fontMessage);
-                float positionWidthX = (ClientSize.Width - fontSize.Width) / 2;
-                float positionHeightY = (ClientSize.Height - fontSize.Height) / 2;
-
-                e.Graphics.DrawRectangle(Pens.Black, 
-                    positionWidthX - 10, 
-                    positionHeightY - 10, 
-                    fontSize.Width + 20, 
-                    fontSize.Height + 20
-                );
-
-                e.Graphics.DrawString(message, 
-                    fontMessage, 
-                    Brushes.Black, 
-                    positionWidthX, 
-                    positionHeightY);
-
+                DrawMessageInCenter(e.Graphics, "Press ENTER to start");
                 return;
             }
+            else if (gameOver)
+            {
+                DrawMessageInCenter(e.Graphics, "Game Over\n" + "Press R to reset");
+                return;
+            }
+
             base.OnPaint(e);
 
             foreach (var segment in snake)
@@ -161,19 +148,19 @@ namespace Snake
             switch (e.KeyCode)
             {
                 case Keys.Right: // Right key
-                    delta_x = 5; delta_y = 0; // Moving 5 pixels to the right x direction, 0 y direction (each tick)
+                    delta_x = cell; delta_y = 0; // Moving 5 pixels to the right x direction, 0 y direction (each tick)
                     break;
 
                 case Keys.Left: // Left key
-                    delta_x = -5; delta_y = 0; // Moving 5 pixels to the left x direction, 0 y direction (each tick)
+                    delta_x = -cell; delta_y = 0; // Moving 5 pixels to the left x direction, 0 y direction (each tick)
                     break;
 
                 case Keys.Up: // Up key
-                    delta_x = 0; delta_y = -5; // Moving 5 pixels up y direction, 0 x direction (each tick)
+                    delta_x = 0; delta_y = -cell; // Moving 5 pixels up y direction, 0 x direction (each tick)
                     break;
 
                 case Keys.Down: // Down key
-                    delta_x = 0; delta_y = 5; // Moving 5 pixels down y direction, 0 x direction (each tick)
+                    delta_x = 0; delta_y = cell; // Moving 5 pixels down y direction, 0 x direction (each tick)
                     break;
             }
         }
@@ -232,6 +219,27 @@ namespace Snake
             foodY = newFood.Y;
 
             }
-        
+
+        private void DrawMessageInCenter(Graphics g, string message)
+        {
+            using var fontMessage = new Font("Arial", 24);
+            SizeF fontSize = g.MeasureString(message, fontMessage);
+            float positionWidthX = (ClientSize.Width - fontSize.Width) / 2;
+            float positionHeightY = (ClientSize.Height - fontSize.Height) / 2;
+
+            g.DrawRectangle(Pens.Black,
+                positionWidthX - 10,
+                positionHeightY - 10,
+                fontSize.Width + 20,
+                fontSize.Height + 20
+                );
+            g.DrawString(message, 
+                fontMessage, 
+                Brushes.Black, 
+                positionWidthX, 
+                positionHeightY
+                );
+
+        }
     }
 }
