@@ -9,8 +9,9 @@ namespace Snake
     {
         int x = 50; // position x
         int y = 50; // position y
-        int dx = 20; // speed (right)
-        int dy = 0;
+        int dx = 5; // starting speed (right)
+        int dy = 0; // 
+        const int cell = 20; // One cell = 20 pixels
 
         List<Point> snake = new List<Point>(); // list with Point-objects (each Point have X and Y values - coordinates to a segment)
 
@@ -21,7 +22,6 @@ namespace Snake
         public Form1()
         {
             InitializeComponent(); // Creates the window
-            const int cell = 20;
             this.ClientSize = new Size(800, 600);
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -40,7 +40,7 @@ namespace Snake
 
             if (newX < 0)
             {
-                newX = this.ClientSize.Width - 20;
+                newX = this.ClientSize.Width - cell;
             } else if (newX >= this.ClientSize.Width)
             {
                 newX = 0;
@@ -48,8 +48,8 @@ namespace Snake
 
             if (newY < 0)
             {
-                newY = this.ClientSize.Width - 20;
-            } else if (newY >= this.ClientSize.Width)
+                newY = this.ClientSize.Height - cell;
+            } else if (newY >= this.ClientSize.Height)
             {
                 newY = 0;
             }
@@ -63,16 +63,16 @@ namespace Snake
             snake[0] = new Point(newX, newY);
 
             // Collision with food
-            if (newX < foodX + 20 && 
-                newX + 20 > foodX &&
-                newY < foodY + 20 &&
-                newY + 20 > foodY) 
+            if (newX < foodX + cell && 
+                newX + cell > foodX &&
+                newY < foodY + cell &&
+                newY + cell > foodY) 
             {
                 SpawnFood(); // if true; move food to new random location
 
                 snake.Add(snake[snake.Count - 1]); // Adding a new tailjoint
 
-                if (GameTimer.Interval > 20)
+                if (GameTimer.Interval > cell)
                 {
                     GameTimer.Interval -= 5;
                 }
@@ -86,10 +86,10 @@ namespace Snake
 
             foreach (var segment in snake)
             {
-                e.Graphics.FillRectangle(Brushes.Green, segment.X, segment.Y, 20, 20);
+                e.Graphics.FillRectangle(Brushes.Green, segment.X, segment.Y, cell, cell);
             }
             
-            e.Graphics.FillRectangle(Brushes.Red, foodX, foodY, 20, 20);
+            e.Graphics.FillRectangle(Brushes.Red, foodX, foodY, cell, cell);
 
             //e.Graphics.FillRectangle(Brushes.Green, x, y, 20, 20);
         }
@@ -120,11 +120,11 @@ namespace Snake
         }
             private void SpawnFood()
             {
-                int maxX = (this.ClientSize.Width / 20) - 1;
-                int maxY = (this.ClientSize.Width / 20) - 1;
+                int maxX = (this.ClientSize.Width / cell) - 1;
+                int maxY = (this.ClientSize.Height / cell) - 1;
 
-                foodX = rand.Next(0, this.ClientSize.Width / maxX) * 20;
-                foodY = rand.Next(0, this.ClientSize.Width / maxY) * 20;
+                foodX = rand.Next(0, this.ClientSize.Width / maxX) * cell;
+                foodY = rand.Next(0, this.ClientSize.Height / maxY) * cell;
 
                 Point newFood;
                 bool onSnake;
@@ -132,8 +132,8 @@ namespace Snake
             do
             {
                 onSnake = false;
-                int fx = rand.Next(0, maxX) * 20;
-                int fy = rand.Next(0, maxY) * 20;
+                int fx = rand.Next(0, maxX) * cell;
+                int fy = rand.Next(0, maxY) * cell;
                 newFood = new Point(fx, fy);
 
                 foreach (var segment in snake)
