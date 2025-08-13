@@ -7,22 +7,24 @@ namespace Snake
 {
     public partial class Form1 : Form
     {
-        int x = 50; // position x
-        int y = 50; // position y
-        int delta_x = 5; // starting speed (right) delta x
-        int delta_y = 0; // delta y
-        const int cell = 20; // One cell = 20 pixels (size)
-        bool gameOver = false;
-        bool gameStarted = false;
-        int score = 0; // Counting variable for game points
-        const int scoreBoardSection = 40;
+        int x = 50;                 // Position x 
+        int y = 50;                 // Position y
+        int delta_x = 5;            // Starting speed (horisontal right)
+        int delta_y = 0;            // Snake is only supposed to move horisontal, so y must be 0 to not move. Only one way at a time.
+        int foodX, foodY;           // horisontal and vertical coordinates for the food on the gameboard. (0, 0)
+        int score = 0;              // Counting variable for game points
 
-        List<Point> snake = new List<Point>(); // list with Point-objects (each Point have X and Y values - coordinates to a segment)
+        bool gameOver = false;      // The game is running when false. Game is over when variable is set to true
+        bool gameStarted = false;   // Flag used to show startscreen. Will be set to true to run game
 
-        Random rand = new Random();
-        int foodX, foodY;
+        const int cell = 20;                // One cell = 20 pixels (size)
+        const int scoreBoardSection = 40;   // 40 pixels to give room for both score text and snake/food wont be drawn over text
 
-        private readonly System.Windows.Forms.Timer GameTimer = new System.Windows.Forms.Timer { Interval = 100 }; // Timer = WinForms-timer
+        Random rand = new Random(); // Creates a random object to generate random numbers for the game. Used for spawning food at random locations on the gameboard
+
+        List<Point> snake = new List<Point>(); // list with Point-objects (each Point have X and Y values -> coordinates to a segment -> 1 segment is one body joint)
+
+        private readonly System.Windows.Forms.Timer GameTimer = new System.Windows.Forms.Timer { Interval = 100 }; // Timer = WinForms-timer. One Tick each 100 ms: GamerTime() have 10 ticks per second
         public Form1()
         {
             InitializeComponent(); // Creates the window
