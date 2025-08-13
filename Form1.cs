@@ -12,7 +12,8 @@ namespace Snake
         int delta_x = 5; // starting speed (right) delta x
         int delta_y = 0; // delta y
         const int cell = 20; // One cell = 20 pixels
-        bool gameOver = false; 
+        bool gameOver = false;
+        int score = 0; // Counting variable for game points
 
         List<Point> snake = new List<Point>(); // list with Point-objects (each Point have X and Y values - coordinates to a segment)
 
@@ -74,9 +75,9 @@ namespace Snake
                 if (snake[i] == head) // Point compared to X and Y value-equality
                 {
                     GameTimer.Stop(); // Stop the game - the timer stops
-                    gameOver = true; 
+                    gameOver = true;
                     MessageBox.Show("Game Over!"); // Feedback in a popup window - game over
-                    MessageBox.Show("Restart Game. Press R");
+                    MessageBox.Show("Restart Game. Press R"); // Popup window for reset game, press R key on keyboard
                     return; // returns to cancel method from running food, drawing etc.
                 }
             }
@@ -87,11 +88,13 @@ namespace Snake
                 newY < foodY + cell &&
                 newY + cell > foodY) 
             {
-                SpawnFood(); // if true; move food to new random location
+                SpawnFood(); // if true -> move food to new random location
+                
+                score++; // Incrementing score
 
                 snake.Add(snake[snake.Count - 1]); // Adding a new tailjoint
 
-                if (GameTimer.Interval > cell)
+                if (GameTimer.Interval > cell) 
                 {
                     GameTimer.Interval -= 5;
                 }
@@ -109,6 +112,7 @@ namespace Snake
             }
 
             e.Graphics.FillRectangle(Brushes.Red, foodX, foodY, cell, cell);
+            e.Graphics.DrawString($"Score: {score}", SystemFonts.DefaultFont, Brushes.Black, 10, 10);
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
@@ -141,12 +145,19 @@ namespace Snake
         private void ResetGame()
         {
             snake.Clear(); // Removes all elements from the list - snake head and body
+
             snake.Add(new Point(x, y));
-            delta_x = 5;
-            delta_y = 0;
-            SpawnFood();
+            
+            delta_x = 5; // Resetting the snake speed back to 5 pixels -> right movement along x-axis
+            delta_y = 0; // Want y to be zero
+
+            score = 0;
+            
+            SpawnFood(); // Calling method to reset food spawning and positioning
+            
             gameOver = false;
-            GameTimer.Start();
+            
+            GameTimer.Start(); // Restarting game -> Starts the timer
         }
 
             private void SpawnFood()
@@ -167,8 +178,9 @@ namespace Snake
                 int fy = rand.Next(0, maxY) * cell;
                 newFood = new Point(fx, fy);
 
-                foreach (var segment in snake)
+                foreach (var segment in snake) // segment = element in snake-list -> segment = body joint(cell) of the snake
                 {
+
                     if (segment == newFood)
                     {
                         onSnake = true;
