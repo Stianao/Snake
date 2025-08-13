@@ -151,7 +151,7 @@ namespace Snake
             delta_x = 5; // Resetting the snake speed back to 5 pixels -> right movement along x-axis
             delta_y = 0; // Want y to be zero
 
-            score = 0;
+            score = 0; 
             
             SpawnFood(); // Calling method to reset food spawning and positioning
             
