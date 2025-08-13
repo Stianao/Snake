@@ -9,7 +9,7 @@ namespace Snake
     {
         int x = 50; // position x
         int y = 50; // position y
-        int dx = 5; // speed (right)
+        int dx = 20; // speed (right)
         int dy = 0;
 
         List<Point> snake = new List<Point>(); // list with Point-objects (each Point have X and Y values - coordinates to a segment)
@@ -21,6 +21,10 @@ namespace Snake
         public Form1()
         {
             InitializeComponent(); // Creates the window
+            const int cell = 20;
+            this.ClientSize = new Size(800, 600);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             GameTimer.Tick += GameLoop; // Connects the timer Tick-event to method GameLoop
             GameTimer.Start(); // Starting timer
             this.KeyDown += KeyIsDown;
@@ -121,6 +125,32 @@ namespace Snake
 
                 foodX = rand.Next(0, this.ClientSize.Width / maxX) * 20;
                 foodY = rand.Next(0, this.ClientSize.Width / maxY) * 20;
+
+                Point newFood;
+                bool onSnake;
+
+            do
+            {
+                onSnake = false;
+                int fx = rand.Next(0, maxX) * 20;
+                int fy = rand.Next(0, maxY) * 20;
+                newFood = new Point(fx, fy);
+
+                foreach (var segment in snake)
+                {
+                    if (segment == newFood)
+                    {
+                        onSnake = true;
+                        break;
+                    }
+                }
+            }
+
+            while (onSnake);
+
+            foodX = newFood.X;
+            foodY = newFood.Y;
+
             }
         
     }
