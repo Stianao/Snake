@@ -42,6 +42,9 @@ namespace Snake
             int newX = snake[0].X + delta_x; 
             int newY = snake[0].Y + delta_y;
 
+            int topY = scoreBoardSection; // 
+            int bottomY = this.ClientSize.Height - cell;
+
             if (newX < 0)
             {
                 newX = this.ClientSize.Width - cell;
@@ -49,9 +52,6 @@ namespace Snake
             {
                 newX = 0;
             }
-
-            int topY = scoreBoardSection; // 
-            int bottomY = this.ClientSize.Height - cell;
 
             if (newY < topY)
             {
