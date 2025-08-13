@@ -26,19 +26,30 @@ namespace Snake
 
         private readonly System.Windows.Forms.Timer GameTimer = new System.Windows.Forms.Timer { Interval = 100 }; // Timer = WinForms-timer. One Tick each 100 ms: GamerTime() have 10 ticks per second
         public Form1()
+            ///<summary>
+            /// Initializing main window for Snake, setting up game variables, event handling 
+            /// and game state.
+            ///</summary>
         {
-            InitializeComponent(); // Creates the window
+            InitializeComponent();  // Creates the window
+
             this.ClientSize = new Size(800, 600); // Window size object - length: 800, height: 600
             this.FormBorderStyle = FormBorderStyle.FixedSingle; 
             this.MaximizeBox = false;
-            GameTimer.Tick += GameLoop; // Connects the timer Tick-event to method GameLoop
-            //GameTimer.Start(); // Starting timer
-            this.KeyDown += KeyIsDown;
             this.DoubleBuffered = true;
+
+            GameTimer.Tick += GameLoop; // Connects the timer Tick-event to method GameLoop
+
+            this.KeyDown += KeyIsDown;
+
             snake.Add(new Point(50, 50)); // Start position for the head
+
             SpawnFood();
         }
         private void GameLoop(object sender, EventArgs e) // Method runs every "tick"
+        ///<summary>
+        ///
+        ///</summary>
         {
             // Calculating new head for head. snake[0] is the head. First element in list.
             int newX = snake[0].X + delta_x; 
@@ -110,6 +121,9 @@ namespace Snake
             Invalidate(); // Draw new window -> will trigger OnPaint-method
         }
         protected override void OnPaint(PaintEventArgs e)
+        ///<summary>
+        ///
+        ///</summary>
         {
             if (!gameStarted)
             {
@@ -134,6 +148,9 @@ namespace Snake
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
+        ///<summary>
+        ///
+        ///</summary>
         {
             if (!gameStarted && e.KeyCode == Keys.Enter)
             {
@@ -167,6 +184,9 @@ namespace Snake
             }
         }
         private void ResetGame()
+        ///<summary>
+        ///
+        ///</summary>
         {
             snake.Clear(); // Removes all elements from the list - snake head and body
 
@@ -185,8 +205,11 @@ namespace Snake
         }
 
             private void SpawnFood()
+        ///<summary>
+        ///
+        ///</summary>
             {
-                int maxX = (this.ClientSize.Width / cell) - 1; // x-direction
+            int maxX = (this.ClientSize.Width / cell) - 1; // x-direction
                 int maxY = (this.ClientSize.Height / cell) - 1; // y-direction
 
                 int minRow = scoreBoardSection / cell; 
@@ -223,6 +246,9 @@ namespace Snake
             }
 
         private void DrawMessageInCenter(Graphics g, string message)
+        ///<summary>
+        ///
+        ///</summary>
         {
             using var fontMessage = new Font("Arial", 24);
             SizeF fontSize = g.MeasureString(message, fontMessage);
