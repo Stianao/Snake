@@ -59,6 +59,8 @@ namespace Snake
             int topY = scoreBoardSection; // 
             int bottomY = this.ClientSize.Height - cell;
 
+            // --------------------------------------------------------------------
+
             if (newX < 0)
             {
                 newX = this.ClientSize.Width - cell;
@@ -67,6 +69,7 @@ namespace Snake
             {
                 newX = 0;
             }
+
             if (newY < topY)
             {
                 newY = bottomY;
@@ -75,6 +78,8 @@ namespace Snake
             {
                 newY = topY;
             }
+
+            // --------------------------------------------------------------------
 
             // Moving snake body backwards
             for (int i = snake.Count - 1; i > 0; i--)
@@ -86,25 +91,25 @@ namespace Snake
 
             Point head = snake[0]; // head = snakes new head position
 
+            // --------------------------------------------------------------------
             // Collision check for head and body, from element 1 to element n
             // for-loop checking every "body joint" from index 1 and onwards
             // Point is a valuetype comparing X and Y
 
-            for (int i = 1; i < snake.Count; i++)// starting at 1: We do not want to compare head (element 0) with itself
+            for (int i = 1; i < snake.Count; i++) // starting at 1: We do not want to compare head (element 0) with itself
             {
-                if (snake[i] == head) // Point compared to X and Y value-equality
+                if (snake[i] == head)   // Point compared to X and Y value-equality
                 {
-                    GameTimer.Stop(); // Stop the game - the timer stops
-                    gameOver = true;
-                    Invalidate();
-                    //MessageBox.Show("Game Over!"); // Feedback in a popup window - game over
-                    //MessageBox.Show("Restart Game. Press R"); // Popup window for reset game, press R key on keyboard
-                    return; // returns to cancel method from running food, drawing etc.
+                    GameTimer.Stop();   // Stop the game - the timer stops, no more ticks
+                    gameOver = true;    // Changing the game state to Game Over
+                    Invalidate();       // Force a new drawing 
+                    return;             // returns to cancel method from running food, drawing etc.
                 }
             }
 
+            // --------------------------------------------------------------------
             // Collision with food
-            if (newX < foodX + cell &&
+            if (newX < foodX + cell && // 
                 newX + cell > foodX &&
                 newY < foodY + cell &&
                 newY + cell > foodY)
