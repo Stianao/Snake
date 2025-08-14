@@ -13,6 +13,7 @@ namespace Snake
         int delta_y = 0;            // Snake is only supposed to move horisontal, so y must be 0 to not move. Only one way at a time.
         int foodX, foodY;           // horisontal and vertical coordinates for the food on the gameboard. (0, 0)
         int score = 0;              // Counting variable for game points
+        int startInterval = 100;    // Starting interval (reset) at 100 ms => 10 ticks per second
 
         bool gameOver = false;      // The game is running when false. Game is over when variable is set to true
         bool gameStarted = false;   // Flag used to show startscreen. Will be set to true to run game
@@ -170,19 +171,19 @@ namespace Snake
             switch (e.KeyCode)
             {
                 case Keys.Right: // Right key
-                    delta_x = cell; delta_y = 0;    // Moving 5 pixels to the right x direction, 0 y direction (each tick)
+                    delta_x = 5; delta_y = 0;    // Moving 5 pixels to the right x direction, 0 y direction (each tick) steplength
                     break;
 
                 case Keys.Left: // Left key
-                    delta_x = -cell; delta_y = 0;   // Moving 5 pixels to the left x direction, 0 y direction (each tick)
+                    delta_x = -5; delta_y = 0;   // Moving 5 pixels to the left x direction, 0 y direction (each tick) steplength
                     break;
 
                 case Keys.Up: // Up key
-                    delta_x = 0; delta_y = -cell;   // Moving 5 pixels up y direction, 0 x direction (each tick)
+                    delta_x = 0; delta_y = -5;   // Moving 5 pixels up y direction, 0 x direction (each tick) steplength
                     break;
 
                 case Keys.Down: // Down key
-                    delta_x = 0; delta_y = cell;    // Moving 5 pixels down y direction, 0 x direction (each tick)
+                    delta_x = 0; delta_y = 5;    // Moving 5 pixels down y direction, 0 x direction (each tick) steplength
                     break;
             }
         }
@@ -204,6 +205,8 @@ namespace Snake
 
             gameOver = false;
 
+            GameTimer.Interval = startInterval;
+
             GameTimer.Start(); // Restarting game -> Starts the timer
         }
 
@@ -212,8 +215,8 @@ namespace Snake
         ///
         ///</summary>
         {
-            int maxX = (this.ClientSize.Width / cell) - 1; // x-direction
-            int maxY = (this.ClientSize.Height / cell) - 1; // y-direction
+            int maxX = (this.ClientSize.Width / cell) - 1;      // x-direction
+            int maxY = (this.ClientSize.Height / cell) - 1;     // y-direction
 
             int minRow = scoreBoardSection / cell;
 
@@ -245,7 +248,6 @@ namespace Snake
 
             foodX = newFood.X;
             foodY = newFood.Y;
-
         }
 
         private void DrawMessageInCenter(Graphics g, string firstLine, string secondLine)
@@ -253,11 +255,6 @@ namespace Snake
         ///
         ///</summary>
         {
-            //using var fontMessage = new Font("Arial", 24);
-            //SizeF fontSize = g.MeasureString(message, fontMessage);
-            //float positionWidthX = (ClientSize.Width - fontSize.Width) / 2;
-            //float positionHeightY = (ClientSize.Height - fontSize.Height) / 2;
-
             using var font1 = new Font("Arial", 32, FontStyle.Bold);
             using var font2 = new Font("Arial", 24);
 
@@ -278,21 +275,6 @@ namespace Snake
             float line2Y = centerY + 50;
             g.DrawRectangle(Pens.Black, line2X - 10, line2Y - 5, size2.Width + 20, size2.Height + 10);
             g.DrawString(secondLine, font2, Brushes.Black, line2X, line2Y);
-
-
-            //g.DrawRectangle(Pens.Black,
-            //    positionWidthX - 10,
-            //    positionHeightY - 10,
-            //    fontSize.Width + 20,
-            //    fontSize.Height + 20
-            //    );
-            //g.DrawString(message,
-            //    fontMessage,
-            //    Brushes.Black,
-            //    positionWidthX,
-            //    positionHeightY
-            //    );
-
         }
     }
 }
