@@ -26,15 +26,15 @@ namespace Snake
 
         private readonly System.Windows.Forms.Timer GameTimer = new System.Windows.Forms.Timer { Interval = 100 }; // Timer = WinForms-timer. One Tick each 100 ms: GamerTime() have 10 ticks per second
         public Form1()
-            ///<summary>
-            /// Initializing main window for Snake, setting up game variables, event handling 
-            /// and game state.
-            ///</summary>
+        ///<summary>
+        /// Initializing main window for Snake, setting up game variables, event handling 
+        /// and game state.
+        ///</summary>
         {
             InitializeComponent();  // Creates the window
 
             this.ClientSize = new Size(800, 600); // Window size object - length: 800, height: 600
-            this.FormBorderStyle = FormBorderStyle.FixedSingle; 
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.DoubleBuffered = true;
 
@@ -52,7 +52,7 @@ namespace Snake
         ///</summary>
         {
             // Calculating new head for head. snake[0] is the head. First element in list.
-            int newX = snake[0].X + delta_x; 
+            int newX = snake[0].X + delta_x;
             int newY = snake[0].Y + delta_y;
 
             int topY = scoreBoardSection; // 
@@ -61,14 +61,16 @@ namespace Snake
             if (newX < 0)
             {
                 newX = this.ClientSize.Width - cell;
-            } else if (newX >= this.ClientSize.Width)
+            }
+            else if (newX >= this.ClientSize.Width)
             {
                 newX = 0;
             }
             if (newY < topY)
             {
                 newY = bottomY;
-            } else if (newY > bottomY)
+            }
+            else if (newY > bottomY)
             {
                 newY = topY;
             }
@@ -101,23 +103,23 @@ namespace Snake
             }
 
             // Collision with food
-            if (newX < foodX + cell && 
+            if (newX < foodX + cell &&
                 newX + cell > foodX &&
                 newY < foodY + cell &&
-                newY + cell > foodY) 
+                newY + cell > foodY)
             {
                 SpawnFood(); // if true -> move food to new random location
-                
+
                 score++; // Incrementing score
 
                 snake.Add(snake[snake.Count - 1]); // Adding a new tailjoint
 
-                if (GameTimer.Interval > cell) 
+                if (GameTimer.Interval > cell)
                 {
                     GameTimer.Interval -= 5;
                 }
             }
-            
+
             Invalidate(); // Draw new window -> will trigger OnPaint-method
         }
         protected override void OnPaint(PaintEventArgs e)
@@ -127,12 +129,13 @@ namespace Snake
         {
             if (!gameStarted)
             {
-                DrawMessageInCenter(e.Graphics, "Press ENTER to start");
+                DrawMessageInCenter(e.Graphics, "SNAKE", "Press ENTER to play");
+                //DrawMessageInCenter(e.Graphics, "Press ENTER to start");
                 return;
             }
             else if (gameOver)
             {
-                DrawMessageInCenter(e.Graphics, "Game Over\n" + "Press R to reset");
+                DrawMessageInCenter(e.Graphics, "Game Over", "Press R to reset");
                 return;
             }
 
@@ -167,19 +170,19 @@ namespace Snake
             switch (e.KeyCode)
             {
                 case Keys.Right: // Right key
-                    delta_x = cell; delta_y = 0; // Moving 5 pixels to the right x direction, 0 y direction (each tick)
+                    delta_x = cell; delta_y = 0;    // Moving 5 pixels to the right x direction, 0 y direction (each tick)
                     break;
 
                 case Keys.Left: // Left key
-                    delta_x = -cell; delta_y = 0; // Moving 5 pixels to the left x direction, 0 y direction (each tick)
+                    delta_x = -cell; delta_y = 0;   // Moving 5 pixels to the left x direction, 0 y direction (each tick)
                     break;
 
                 case Keys.Up: // Up key
-                    delta_x = 0; delta_y = -cell; // Moving 5 pixels up y direction, 0 x direction (each tick)
+                    delta_x = 0; delta_y = -cell;   // Moving 5 pixels up y direction, 0 x direction (each tick)
                     break;
 
                 case Keys.Down: // Down key
-                    delta_x = 0; delta_y = cell; // Moving 5 pixels down y direction, 0 x direction (each tick)
+                    delta_x = 0; delta_y = cell;    // Moving 5 pixels down y direction, 0 x direction (each tick)
                     break;
             }
         }
@@ -191,32 +194,32 @@ namespace Snake
             snake.Clear(); // Removes all elements from the list - snake head and body
 
             snake.Add(new Point(x, y));
-            
+
             delta_x = 5; // Resetting the snake speed back to 5 pixels -> right movement along x-axis
             delta_y = 0; // Want y to be zero
 
             score = 0; // resetting score back to zero at game reset (from game over)
-            
+
             SpawnFood(); // Calling method to reset food spawning and positioning
-            
+
             gameOver = false;
-            
+
             GameTimer.Start(); // Restarting game -> Starts the timer
         }
 
-            private void SpawnFood()
+        private void SpawnFood()
         ///<summary>
         ///
         ///</summary>
-            {
+        {
             int maxX = (this.ClientSize.Width / cell) - 1; // x-direction
-                int maxY = (this.ClientSize.Height / cell) - 1; // y-direction
+            int maxY = (this.ClientSize.Height / cell) - 1; // y-direction
 
-                int minRow = scoreBoardSection / cell; 
+            int minRow = scoreBoardSection / cell;
 
-                Point newFood;
+            Point newFood;
 
-                bool onSnake;
+            bool onSnake;
 
             do
             {
@@ -243,30 +246,52 @@ namespace Snake
             foodX = newFood.X;
             foodY = newFood.Y;
 
-            }
+        }
 
-        private void DrawMessageInCenter(Graphics g, string message)
+        private void DrawMessageInCenter(Graphics g, string firstLine, string secondLine)
         ///<summary>
         ///
         ///</summary>
         {
-            using var fontMessage = new Font("Arial", 24);
-            SizeF fontSize = g.MeasureString(message, fontMessage);
-            float positionWidthX = (ClientSize.Width - fontSize.Width) / 2;
-            float positionHeightY = (ClientSize.Height - fontSize.Height) / 2;
+            //using var fontMessage = new Font("Arial", 24);
+            //SizeF fontSize = g.MeasureString(message, fontMessage);
+            //float positionWidthX = (ClientSize.Width - fontSize.Width) / 2;
+            //float positionHeightY = (ClientSize.Height - fontSize.Height) / 2;
 
-            g.DrawRectangle(Pens.Black,
-                positionWidthX - 10,
-                positionHeightY - 10,
-                fontSize.Width + 20,
-                fontSize.Height + 20
-                );
-            g.DrawString(message, 
-                fontMessage, 
-                Brushes.Black, 
-                positionWidthX, 
-                positionHeightY
-                );
+            using var font1 = new Font("Arial", 32, FontStyle.Bold);
+            using var font2 = new Font("Arial", 24);
+
+            SizeF size1 = g.MeasureString(firstLine, font1);
+            SizeF size2 = g.MeasureString(secondLine, font2);
+
+            float centerX = ClientSize.Width / 2f;
+            float centerY = ClientSize.Height / 2f;
+
+            // First line
+            float line1X = centerX - size1.Width / 2f;
+            float line1Y = centerY - size1.Height;
+            g.DrawRectangle(Pens.Black, line1X - 10, line1Y - 5, size1.Width + 20, size1.Height + 10);
+            g.DrawString(firstLine, font1, Brushes.Black, line1X, line1Y);
+
+            // Second line
+            float line2X = centerX - size2.Width / 2f;
+            float line2Y = centerY + 50;
+            g.DrawRectangle(Pens.Black, line2X - 10, line2Y - 5, size2.Width + 20, size2.Height + 10);
+            g.DrawString(secondLine, font2, Brushes.Black, line2X, line2Y);
+
+
+            //g.DrawRectangle(Pens.Black,
+            //    positionWidthX - 10,
+            //    positionHeightY - 10,
+            //    fontSize.Width + 20,
+            //    fontSize.Height + 20
+            //    );
+            //g.DrawString(message,
+            //    fontMessage,
+            //    Brushes.Black,
+            //    positionWidthX,
+            //    positionHeightY
+            //    );
 
         }
     }
