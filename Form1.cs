@@ -149,17 +149,21 @@ namespace Snake
 
             foreach (var segment in snake)
             {
-                e.Graphics.FillRectangle(Brushes.Green, segment.X, segment.Y, cell, cell); // Drawng a green snake
+                e.Graphics.FillRectangle(Brushes.Green, segment.X, segment.Y, cell, cell); // Drawing a green snake
             }
 
             e.Graphics.FillRectangle(Brushes.Red, foodX, foodY, cell, cell); // Drawing red food
-            e.Graphics.DrawString($"Score: {score}", SystemFonts.DefaultFont, Brushes.Black, 10, 10); // Showing score at game screen
+
+            e.Graphics.DrawString($"Score: {score}", SystemFonts.DefaultFont, Brushes.Black, 10, 10); // Presenting score at game screen
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
         ///<summary>
-        ///
+        /// Handles key presses to start the game, reset after the game is over
+        /// and change the snake's direction based on arrow keys.
         ///</summary>
+        ///<param name="sender">The source of the event.</param>
+        ///<param name="e">Contains the key data for the event</param>
         {
             if (!gameStarted && e.KeyCode == Keys.Enter)
             {
