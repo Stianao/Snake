@@ -214,7 +214,7 @@ namespace Snake
 
             gameOver = false;
 
-            GameTimer.Interval = startInterval;
+            GameTimer.Interval = startInterval; // Resetting start interval back to 100 ms after Game Over
 
             GameTimer.Start(); // Restarting game -> Starts the timer
         }

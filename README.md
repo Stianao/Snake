@@ -1,13 +1,28 @@
 # Snake
 
-This is a snake game written in C# with WinForms. First off you will be met with a "Press ENTER to start" text. The game will start when pressing the ENTER key. The screenshot below shows the home screen for the game. 
+A simple snake game built with C# and Windows Forms.
 
 ![Game start screenshot](Images/SNAKE_Press_ENTER.png)
 
-Below is a gif demonstrating how the game works from pressing ENTER to the snake eating its first food. The score will update from 0 to 1 when the snake eats the first food.
-
 ![Snake game](Images/Animation.gif)
 
-This is the game over screen. 
-
 ![Game Over screenshot](Images/Game_Over.png)
+
+## Installation
+1. Clone the repository:
+```bash
+git clone https://github.com/Stianao/Snake.git
+```
+2. Open the project in Visual Studio.
+3. press f5 to run.
+
+## Features
+- Title screen and start game
+- Snake movement with wrap-around edges
+- Randomly spawning food
+- Speed increasing as you score
+- Snake collision stops game
+- Game Over and Reset screen
+
+## TODO
+- Add more graphics
