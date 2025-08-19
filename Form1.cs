@@ -49,8 +49,12 @@ namespace Snake
         }
         private void GameLoop(object sender, EventArgs e) // Method runs every "tick"
         ///<summary>
-        ///
+        /// Executes one game update cycle for the snake game.
+        /// Handles snake movement, screen wrapping, collision detection with food and itself,
+        /// updates score, increases speed, and triggers redraw
         ///</summary>
+        ///<param name="sender">The source of the event (timer)</param>
+        ///<param name="e">Event data</param>
         {
             // Calculating new head for head. snake[0] is the head. First element in list.
             int newX = snake[0].X + delta_x;
